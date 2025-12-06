@@ -1,16 +1,48 @@
-# This is a sample Python script.
-
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
+import yt_dlp
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
+def download_video(video_url):
+    """
+    Downloads a video from the given URL using yt-dlp.
+    """
+    ydl_opts = {} # Empty dictionary for default options
+    try:
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            ydl.download([video_url])
+        print(f"Successfully downloaded: {video_url}")
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm') 
+def download_audio_only(video_url, download_path='.'):
+    """
+    Downloads only the audio and converts it to MP3 format.
+    """
+    ydl_opts = {
+        'format': 'bestaudio/best', # Download best quality audio
+        'outtmpl': f'{download_path}/%(title)s.%(ext)s', # Output file template
+        'noplaylist': True, # Only download single video, not entire playlist
+        'progress_hooks': [my_progress_hook], # Optional: Add a progress hook
+        'postprocessors': [{
+            'key': 'FFmpegExtractAudio',
+            'preferredcodec': 'mp3',
+            'preferredquality': '192',
+        }],
+    }
+    try:
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            ydl.download([video_url])
+        print(f"Successfully downloaded audio from: {video_url}")
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+
+def my_progress_hook(d):
+    """Optional function to log download progress."""
+    if d['status'] == 'finished':
+        print('\nDone downloading, starting post-processing...')
+
+
+if __name__ == "__main__":
+    url = 'https://soundcloud.com/xf8x/i-put-a-drill-beat-over-hello-by-adele'
+    download_audio_only(url)
