@@ -1,28 +1,28 @@
 import yt_dlp
 
 
-def download_video(video_url):
+def download_video(url):
     """
     Downloads a video from the given URL using yt-dlp.
     """
     ydl_opts = {} # Empty dictionary for default options
     try:
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            ydl.download([video_url])
-        print(f"Successfully downloaded: {video_url}")
+            ydl.download([url])
+        print(f"Successfully downloaded: {url}")
     except Exception as e:
         print(f"An error occurred: {e}")
 
 
-def download_audio_only(video_url, download_path='.'):
+def download_audio_only(url, download_path='.'):
     """
     Downloads only the audio and converts it to MP3 format.
     """
     ydl_opts = {
-        'format': 'bestaudio/best', # Download best quality audio
-        'outtmpl': f'{download_path}/%(title)s.%(ext)s', # Output file template
-        'noplaylist': True, # Only download single video, not entire playlist
-        'progress_hooks': [my_progress_hook], # Optional: Add a progress hook
+        'format': 'bestaudio/best',  # Download best quality audio
+        'outtmpl': f'{download_path}/%(title)s.%(ext)s',  # Output file template
+        'noplaylist': True,  # Only download single song, not entire playlist
+        'progress_hooks': [my_progress_hook],  # Optional: Add a progress hook
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
             'preferredcodec': 'mp3',
@@ -31,8 +31,8 @@ def download_audio_only(video_url, download_path='.'):
     }
     try:
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            ydl.download([video_url])
-        print(f"Successfully downloaded audio from: {video_url}")
+            ydl.download([url])
+        print(f"Successfully downloaded audio from: {url}")
     except Exception as e:
         print(f"An error occurred: {e}")
 
