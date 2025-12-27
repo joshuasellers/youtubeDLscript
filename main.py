@@ -19,6 +19,7 @@ def download_audio_only(url, download_path='.'):
     Downloads only the audio and converts it to MP3 format.
     """
     ydl_opts = {
+        'verbose': True,
         'format': 'bestaudio/best',  # Download best quality audio
         'outtmpl': f'{download_path}/%(title)s.%(ext)s',  # Output file template
         'noplaylist': True,  # Only download single song, not entire playlist
